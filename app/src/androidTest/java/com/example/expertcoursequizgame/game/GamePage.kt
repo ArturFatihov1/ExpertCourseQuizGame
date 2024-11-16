@@ -30,12 +30,14 @@ class GamePage(
     }
 
     private val checkUi = ButtonUi(
+        id = R.id.checkButton,
         textResId = R.string.check,
         colorHex = "#6C106C",
         containerIdMatcher = containerIdMatcher,
         containerclassTypeMatcher = classTypeMatcher
     )
     private val nextUi = ButtonUi(
+        id = R.id.nextButton,
         textResId = R.string.next,
         colorHex = "#8897D4",
         containerIdMatcher = containerIdMatcher,

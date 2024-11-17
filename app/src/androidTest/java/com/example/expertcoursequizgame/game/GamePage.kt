@@ -5,6 +5,7 @@ import android.widget.LinearLayout
 import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withParent
+import com.example.expertcoursequizgame.R
 import org.hamcrest.Matcher
 
 class GamePage(
@@ -15,17 +16,24 @@ class GamePage(
     private val classTypeMatcher: Matcher<View> =
         withParent(isAssignableFrom(LinearLayout::class.java))
 
-    private val questionUi =
-        QuestionUi(
-            text = question,
-            containerIdMatcher = containerIdMatcher,
-            containerclassTypeMatcher = classTypeMatcher
-        )
-    private val choicesUiList = choices.map {
+    private val questionUi = QuestionUi(
+        text = question,
+        containerIdMatcher = containerIdMatcher,
+        containerClassTypeMatcher = classTypeMatcher
+    )
+
+    private val choiceUiIdList = listOf(
+        R.id.firstChoiceButton,
+        R.id.secondChoiceButton,
+        R.id.thirdChoiceButton,
+        R.id.forthChoiceButton
+    )
+    private val choicesUiList = choices.mapIndexed { index, text ->
         ChoiceUi(
-            text = it,
+            choiceUiIdList[index],
+            text = text,
             containerIdMatcher = containerIdMatcher,
-            containerclassTypeMatcher = classTypeMatcher
+            containerClassTypeMatcher = classTypeMatcher
         )
     }
 
@@ -34,14 +42,14 @@ class GamePage(
         textResId = R.string.check,
         colorHex = "#6C106C",
         containerIdMatcher = containerIdMatcher,
-        containerclassTypeMatcher = classTypeMatcher
+        containerClassTypeMatcher = classTypeMatcher
     )
     private val nextUi = ButtonUi(
         id = R.id.nextButton,
         textResId = R.string.next,
         colorHex = "#8897D4",
         containerIdMatcher = containerIdMatcher,
-        containerclassTypeMatcher = classTypeMatcher
+        containerClassTypeMatcher = classTypeMatcher
     )
 
     fun assertAskedQuestionState() {
@@ -101,8 +109,8 @@ class GamePage(
         questionUi.assertTextVisible()
         choicesUiList.first().assertCorrectState()
         choicesUiList[1].assertIncorrectState()
-        choicesUiList[2].assertNotAvailableToChoose()
-        choicesUiList[3].assertNotAvailableToChoose()
+        choicesUiList[2].assertNotAvailableToChooseState()
+        choicesUiList[3].assertNotAvailableToChooseState()
         checkUi.assertNotVisible()
         nextUi.assertVisible()
     }

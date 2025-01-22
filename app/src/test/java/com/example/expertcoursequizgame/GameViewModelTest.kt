@@ -131,5 +131,43 @@ class GameViewModelTest {
 }
 
 private class FakeRepository : GameRepository {
-    //todo
+
+    private val list: List<QuestionAndChoices> = listOf(
+        QuestionAndChoices(
+            question = "q1",
+            choice = listOf("c1", "c2", "c3", "c4"),
+            correctIndex = 0
+        ),
+        QuestionAndChoices(
+            question = "q2",
+            choice = listOf("cd1", "cd2", "cd3", "cd4"),
+            correctIndex = 0
+        )
+    )
+
+    private var index = 0
+
+    override fun questionAndChoices(): QuestionAndChoices {
+        return list[index]
+    }
+
+    private var userChoiceIndex = -1
+
+    override fun saveUserChoice(index: Int) {
+        userChoiceIndex = index
+    }
+
+    override fun check(): CorrectAndUserChoiceIndexes {
+        return CorrectAndUserChoiceIndexes(
+            correctIndex = questionAndChoices().correctIndex,
+            userChoiceIndex = userChoiceIndex
+        )
+    }
+
+    override fun next() {
+        userChoiceIndex = -1
+        index++
+        if (index == list.size)
+            index = 0
+    }
 }

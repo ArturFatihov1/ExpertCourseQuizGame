@@ -1,7 +1,7 @@
 package com.example.expertcoursequizgame.game
 
-import android.view.TextureView
 import android.view.View
+import android.widget.TextView
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -25,7 +25,7 @@ class QuestionUi(
             containerClassTypeMatcher,
             withId(R.id.questionTextView),
             withText(text),
-            isAssignableFrom(TextureView::class.java)
+            isAssignableFrom(TextView::class.java)
         )
     )
 

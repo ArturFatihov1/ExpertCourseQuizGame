@@ -4,6 +4,7 @@ import android.graphics.Color
 import androidx.appcompat.widget.AppCompatButton
 
 interface ChoiceUiState {
+
     fun update(button: AppCompatButton)
 
     abstract class Abstract(
@@ -18,7 +19,6 @@ interface ChoiceUiState {
                 setBackgroundColor(Color.parseColor(color))
             isEnabled = enabled
             isClickable = clickable
-
         }
     }
 

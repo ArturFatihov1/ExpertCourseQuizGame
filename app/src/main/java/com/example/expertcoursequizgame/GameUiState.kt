@@ -31,8 +31,8 @@ interface GameUiState {
     ) : Abstract(
         question,
         choices.map { ChoiceUiState.AvailableToChoose(it) },
-        checkVisibility = View.INVISIBLE,
-        nextVisibility = View.INVISIBLE
+        checkVisibility = View.GONE,
+        nextVisibility = View.GONE
     )
 
     data class ChoiceMade(
@@ -42,7 +42,7 @@ interface GameUiState {
         question,
         choices,
         checkVisibility = View.VISIBLE,
-        nextVisibility = View.INVISIBLE
+        nextVisibility = View.GONE
     )
 
     data class AnswerChecked(
@@ -51,7 +51,7 @@ interface GameUiState {
     ) : Abstract(
         question,
         choices,
-        checkVisibility = View.INVISIBLE,
+        checkVisibility = View.GONE,
         nextVisibility = View.VISIBLE
     )
 }

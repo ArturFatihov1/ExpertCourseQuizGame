@@ -1,45 +1,68 @@
 package com.example.expertcoursequizgame
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.expertcoursequizgame.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var uiState: GameUiState
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val viewModel: GameViewModel = GameViewModel(GameRepository.Base())
+        val viewModel: GameViewModel = (application as QuizApp).viewModel
 
         binding.firstChoiceButton.setOnClickListener {
-            val uiState: GameUiState = viewModel.chooseFirst()
+            uiState = viewModel.chooseFirst()
             uiState.update(binding = binding)
         }
         binding.secondChoiceButton.setOnClickListener {
-            val uiState: GameUiState = viewModel.chooseSecond()
+            uiState = viewModel.chooseSecond()
             uiState.update(binding = binding)
         }
         binding.thirdChoiceButton.setOnClickListener {
-            val uiState: GameUiState = viewModel.chooseThird()
+            uiState = viewModel.chooseThird()
             uiState.update(binding = binding)
         }
         binding.forthChoiceButton.setOnClickListener {
-            val uiState: GameUiState = viewModel.chooseForth()
+            uiState = viewModel.chooseForth()
             uiState.update(binding = binding)
         }
         binding.checkButton.setOnClickListener {
-            val uiState: GameUiState = viewModel.check()
+            uiState = viewModel.check()
             uiState.update(binding = binding)
         }
         binding.nextButton.setOnClickListener {
-            val uiState: GameUiState = viewModel.next()
+            uiState = viewModel.next()
             uiState.update(binding = binding)
         }
-
-        val uiState: GameUiState = viewModel.init()
+        uiState = if (savedInstanceState == null) {
+            viewModel.init()
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                savedInstanceState.getSerializable(
+                    KEY,
+                    GameUiState::class.java
+                ) as GameUiState
+            } else {
+                savedInstanceState.getSerializable(KEY) as GameUiState
+            }
+        }
         uiState.update(binding = binding)
     }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putSerializable(KEY, uiState)
+    }
+
+    companion object {
+        private const val KEY = "uiState"
+    }
+
 }

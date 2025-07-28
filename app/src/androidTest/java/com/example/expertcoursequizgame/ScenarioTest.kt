@@ -16,7 +16,6 @@ class ScenarioTest {
     val activityScenarioRule = ActivityScenarioRule(MainActivity::class.java)
 
     private lateinit var gamePage: GamePage
-
     @Before
     fun setup() {
         gamePage = GamePage(

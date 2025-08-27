@@ -2,6 +2,7 @@ package com.example.expertcoursequizgame
 
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.example.expertcoursequizgame.game.GameOverPage
 import com.example.expertcoursequizgame.game.GamePage
 import org.junit.Before
 import org.junit.Rule
@@ -94,6 +95,7 @@ class ScenarioTest {
 
     @Test
     fun caseNumber3() {
+        //region 2 incorrects
         gamePage.assertAskedQuestionState()
         activityScenarioRule.scenario.recreate()
         gamePage.assertAskedQuestionState()
@@ -138,7 +140,9 @@ class ScenarioTest {
 
         gameOverPage.clickNewGame()
         gameOverPage.assertNotVisible()
+        //endregion
 
+        //region 1 incorrects 1 corrects
         gamePage = GamePage(
             question = "What color is the blood?",
             choices = listOf("red", "blue", "yellow", "green")
@@ -191,8 +195,9 @@ class ScenarioTest {
 
         gameOverPage.clickNewGame()
         gameOverPage.assertNotVisible()
+        //endregion
 
-
+        //region 2 corrects
         gamePage = GamePage(
             question = "What color is the crocodile?",
             choices = listOf("green", "blue", "yellow", "red")
@@ -238,6 +243,7 @@ class ScenarioTest {
         gameOverPage.assertInitialState()
         activityScenarioRule.scenario.recreate()
         gameOverPage.assertInitialState()
+        //endregion
 
     }
 

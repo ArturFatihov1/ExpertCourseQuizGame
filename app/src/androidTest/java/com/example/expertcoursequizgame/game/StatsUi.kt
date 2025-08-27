@@ -11,26 +11,27 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.example.expertcoursequizgame.R
-import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.Matcher
+import org.hamcrest.Matchers.allOf
 
-class QuestionUi(
-    text: String,
+class StatsUi(
+    incorrects: Int,
+    corrects: Int,
     containerIdMatcher: Matcher<View>,
-    containerClassTypeMatcher: Matcher<View>
+    classTypeMatcher: Matcher<View>
 ) {
-
-    private val interaction: ViewInteraction = onView(
-        allOf(
-            containerIdMatcher,
-            containerClassTypeMatcher,
-            withId(R.id.questionTextView),
-            withText(text),
-            isAssignableFrom(TextView::class.java)
+    private val interaction: ViewInteraction =
+        onView(
+            allOf(
+                withId(R.id.statsTextView),
+                isAssignableFrom(TextView::class.java),
+                withText("Corrects: $corrects\nIncorrects: $incorrects"),
+                containerIdMatcher,
+                classTypeMatcher
+            )
         )
-    )
 
-    fun assertTextVisible() {
+    fun assertVisible() {
         interaction.check(matches(isDisplayed()))
     }
 

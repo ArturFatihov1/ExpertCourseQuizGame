@@ -1,6 +1,5 @@
 package com.example.expertcoursequizgame
 
-import android.view.View
 import com.example.expertcoursequizgame.views.choice.ChoiceUiState
 import com.example.expertcoursequizgame.views.choice.UpdateChoiceButton
 import com.example.expertcoursequizgame.views.question.UpdateText
@@ -51,8 +50,8 @@ interface GameUiState : Serializable {
             secondChoiceButton.update(ChoiceUiState.Initial(choices[1]))
             thirdChoiceButton.update(ChoiceUiState.Initial(choices[2]))
             forthChoiceButton.update(ChoiceUiState.Initial(choices[3]))
-            nextButton.update(VisibilityUiState(View.GONE))
-            checkButton.update(VisibilityUiState(View.GONE))
+            nextButton.update(VisibilityUiState.Gone)
+            checkButton.update(VisibilityUiState.Gone)
         }
 
     }
@@ -73,7 +72,7 @@ interface GameUiState : Serializable {
             secondChoiceButton.update(choices[1])
             thirdChoiceButton.update(choices[2])
             forthChoiceButton.update(choices[3])
-            checkButton.update(VisibilityUiState(View.VISIBLE))
+            checkButton.update(VisibilityUiState.Visible)
         }
 
     }
@@ -94,8 +93,8 @@ interface GameUiState : Serializable {
             secondChoiceButton.update(choices[1])
             thirdChoiceButton.update(choices[2])
             forthChoiceButton.update(choices[3])
-            checkButton.update(VisibilityUiState(View.GONE))
-            nextButton.update(VisibilityUiState(View.VISIBLE))
+            checkButton.update(VisibilityUiState.Gone)
+            nextButton.update(VisibilityUiState.Visible)
         }
     }
 }

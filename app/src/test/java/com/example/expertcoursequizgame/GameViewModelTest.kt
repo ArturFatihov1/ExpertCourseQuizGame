@@ -48,6 +48,40 @@ class GameViewModelTest {
             )
         )
         assertEquals(expected, actual)
+
+        actual = viewModel.next()
+        expected = GameUiState.AskedQuestion(
+            question = "q2",
+            choices = listOf("cd1", "cd2", "cd3", "cd4")
+        )
+        assertEquals(expected, actual)
+
+        actual = viewModel.chooseFirst()
+        expected = GameUiState.ChoiceMade(
+            choices = listOf<ChoiceUiState>(
+                ChoiceUiState.Correct,
+                ChoiceUiState.AvailableToChoose,
+                ChoiceUiState.AvailableToChoose,
+                ChoiceUiState.AvailableToChoose,
+            )
+        )
+        assertEquals(expected, actual)
+
+        actual = viewModel.check()
+        expected = GameUiState.AnswerChecked(
+            choices = listOf<ChoiceUiState>(
+                ChoiceUiState.Correct,
+                ChoiceUiState.NotAvailableToChoose,
+                ChoiceUiState.NotAvailableToChoose,
+                ChoiceUiState.NotAvailableToChoose,
+            )
+        )
+        assertEquals(expected, actual)
+
+        actual = viewModel.next()
+        expected = GameUiState.Finish
+        assertEquals(expected, actual)
+
     }
 
     @Test
@@ -161,7 +195,11 @@ private class FakeRepository : GameRepository {
     override fun next() {
         userChoiceIndex = -1
         index++
-        if (index == list.size)
+        if (isLastQuestion())
             index = 0
+    }
+
+    override fun isLastQuestion(): Boolean {
+        return index == list.size
     }
 }

@@ -3,12 +3,14 @@ package com.example.expertcoursequizgame.stats
 import com.example.expertcoursequizgame.views.stats.StatsUiState
 
 class GameOverViewModel(private val repository: StatsRepository) {
-    fun statsUiState(): StatsUiState {
-        val (corrects, incorrects) = repository.stats()
-        return StatsUiState.Base(corrects, incorrects)
-    }
 
-    fun clear() {
-        repository.clear()
+    fun init(isFirstRun: Boolean): StatsUiState {
+        return if (isFirstRun) {
+            val (corrects, incorrects) = repository.stats()
+            repository.clear()
+            StatsUiState.Base(corrects, incorrects)
+        } else {
+            StatsUiState.Empty
+        }
     }
 }

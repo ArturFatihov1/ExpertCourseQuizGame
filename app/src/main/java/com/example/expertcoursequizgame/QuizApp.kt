@@ -19,6 +19,6 @@ class QuizApp : Application() {
                 IntCache.Base(sharedPreferences, "userChoiceIndexKey", -1)
             )
         )
-        gameOverViewModel = GameOverViewModel() //todo
+//        gameOverViewModel = GameOverViewModel() //todo
     }
 }

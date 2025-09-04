@@ -75,7 +75,10 @@ class GameViewModel(private val repository: GameRepository) {
 
     fun next(): GameUiState {
         repository.next()
-        return init()
+        return if (repository.isLastQuestion())
+            GameUiState.Finish
+        else
+            init()
     }
 
     fun init(firstRun: Boolean = true): GameUiState {

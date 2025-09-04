@@ -59,7 +59,7 @@ class GameViewModelTest {
         actual = viewModel.chooseFirst()
         expected = GameUiState.ChoiceMade(
             choices = listOf<ChoiceUiState>(
-                ChoiceUiState.Correct,
+                ChoiceUiState.NotAvailableToChoose,
                 ChoiceUiState.AvailableToChoose,
                 ChoiceUiState.AvailableToChoose,
                 ChoiceUiState.AvailableToChoose,
@@ -81,7 +81,6 @@ class GameViewModelTest {
         actual = viewModel.next()
         expected = GameUiState.Finish
         assertEquals(expected, actual)
-
     }
 
     @Test
@@ -195,8 +194,7 @@ private class FakeRepository : GameRepository {
     override fun next() {
         userChoiceIndex = -1
         index++
-        if (isLastQuestion())
-            index = 0
+
     }
 
     override fun isLastQuestion(): Boolean {

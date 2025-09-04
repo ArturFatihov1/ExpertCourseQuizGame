@@ -1,4 +1,4 @@
-package com.example.expertcoursequizgame
+package com.example.expertcoursequizgame.game
 
 import com.example.expertcoursequizgame.stats.NavigateToGameOver
 import com.example.expertcoursequizgame.views.choice.ChoiceUiState
@@ -93,4 +93,3 @@ interface GameUiState : Serializable {
         }
     }
 }
-

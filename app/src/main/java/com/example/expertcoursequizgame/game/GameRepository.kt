@@ -1,4 +1,6 @@
-package com.example.expertcoursequizgame
+package com.example.expertcoursequizgame.game
+
+import com.example.expertcoursequizgame.IntCache
 
 interface GameRepository {
 

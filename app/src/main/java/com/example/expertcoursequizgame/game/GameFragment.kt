@@ -5,8 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.expertcoursequizgame.GameUiState
-import com.example.expertcoursequizgame.GameViewModel
 import com.example.expertcoursequizgame.QuizApp
 import com.example.expertcoursequizgame.databinding.FragmentGameBinding
 import com.example.expertcoursequizgame.stats.NavigateToGameOver

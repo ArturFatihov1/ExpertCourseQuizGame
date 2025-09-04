@@ -1,4 +1,4 @@
-package com.example.expertcoursequizgame
+package com.example.expertcoursequizgame.game
 
 import com.example.expertcoursequizgame.views.choice.ChoiceUiState
 import org.junit.Assert.assertEquals
@@ -47,6 +47,39 @@ class GameViewModelTest {
                 ChoiceUiState.NotAvailableToChoose,
             )
         )
+        assertEquals(expected, actual)
+
+        actual = viewModel.next()
+        expected = GameUiState.AskedQuestion(
+            question = "q2",
+            choices = listOf("cd1", "cd2", "cd3", "cd4")
+        )
+        assertEquals(expected, actual)
+
+        actual = viewModel.chooseFirst()
+        expected = GameUiState.ChoiceMade(
+            choices = listOf<ChoiceUiState>(
+                ChoiceUiState.NotAvailableToChoose,
+                ChoiceUiState.AvailableToChoose,
+                ChoiceUiState.AvailableToChoose,
+                ChoiceUiState.AvailableToChoose,
+            )
+        )
+        assertEquals(expected, actual)
+
+        actual = viewModel.check()
+        expected = GameUiState.AnswerChecked(
+            choices = listOf<ChoiceUiState>(
+                ChoiceUiState.Correct,
+                ChoiceUiState.NotAvailableToChoose,
+                ChoiceUiState.NotAvailableToChoose,
+                ChoiceUiState.NotAvailableToChoose,
+            )
+        )
+        assertEquals(expected, actual)
+
+        actual = viewModel.next()
+        expected = GameUiState.Finish
         assertEquals(expected, actual)
     }
 
@@ -161,7 +194,10 @@ private class FakeRepository : GameRepository {
     override fun next() {
         userChoiceIndex = -1
         index++
-        if (index == list.size)
-            index = 0
+
+    }
+
+    override fun isLastQuestion(): Boolean {
+        return index == list.size
     }
 }

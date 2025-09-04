@@ -1,5 +1,6 @@
-package com.example.expertcoursequizgame
+package com.example.expertcoursequizgame.game
 
+import com.example.expertcoursequizgame.stats.NavigateToGameOver
 import com.example.expertcoursequizgame.views.choice.ChoiceUiState
 import com.example.expertcoursequizgame.views.choice.UpdateChoiceButton
 import com.example.expertcoursequizgame.views.question.UpdateText
@@ -17,19 +18,13 @@ interface GameUiState : Serializable {
         forthChoiceButton: UpdateChoiceButton,
         nextButton: UpdateVisibility,
         checkButton: UpdateVisibility
-    )
+    ) = Unit
 
-    object Empty : GameUiState {
+    fun navigate(navigate: NavigateToGameOver) = Unit
 
-        override fun update(
-            questionTextView: UpdateText,
-            firstChoiceButton: UpdateChoiceButton,
-            secondChoiceButton: UpdateChoiceButton,
-            thirdChoiceButton: UpdateChoiceButton,
-            forthChoiceButton: UpdateChoiceButton,
-            nextButton: UpdateVisibility,
-            checkButton: UpdateVisibility
-        ) = Unit
+    object Empty : GameUiState
+    object Finish : GameUiState {
+        override fun navigate(navigate: NavigateToGameOver) = navigate.navigateToGameOver()
     }
 
     data class AskedQuestion(
@@ -98,4 +93,3 @@ interface GameUiState : Serializable {
         }
     }
 }
-

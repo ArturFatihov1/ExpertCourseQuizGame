@@ -2,6 +2,9 @@ package com.example.expertcoursequizgame
 
 import android.app.Application
 import android.content.Context
+import com.example.expertcoursequizgame.game.GameRepository
+import com.example.expertcoursequizgame.game.GameViewModel
+import com.example.expertcoursequizgame.stats.GameOverViewModel
 
 class QuizApp : Application() {
 
@@ -16,6 +19,6 @@ class QuizApp : Application() {
                 IntCache.Base(sharedPreferences, "userChoiceIndexKey", -1)
             )
         )
-        gameOverViewModel = GameOverViewModel() //todo
+//        gameOverViewModel = GameOverViewModel() //todo
     }
 }

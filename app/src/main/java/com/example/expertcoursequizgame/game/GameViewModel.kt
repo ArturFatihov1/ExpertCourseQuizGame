@@ -1,4 +1,4 @@
-package com.example.expertcoursequizgame
+package com.example.expertcoursequizgame.game
 
 import com.example.expertcoursequizgame.views.choice.ChoiceUiState
 
@@ -75,7 +75,10 @@ class GameViewModel(private val repository: GameRepository) {
 
     fun next(): GameUiState {
         repository.next()
-        return init()
+        return if (repository.isLastQuestion())
+            GameUiState.Finish
+        else
+            init()
     }
 
     fun init(firstRun: Boolean = true): GameUiState {

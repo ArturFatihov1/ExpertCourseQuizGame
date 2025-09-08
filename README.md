@@ -1,3 +1,3 @@
 First project for expert course: Quiz Game
 
-The application is made using: User Story, testcase in figma, TDD: Uitest(Espresso,) JUnit, kotlin, View(XML)
+The application is made using: User Story, testcase in figma, TDD: Uitest(Espresso,) JUnit, kotlin, View(XML), FragmentApi, SharedPreferences, MVVM, Custom view

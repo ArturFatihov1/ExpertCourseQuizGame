@@ -32,7 +32,7 @@ class GameOverFragment : Fragment() {
             (requireActivity() as NavigateToGame).navigateToGame()
         }
         val uiState = viewModel.init(savedInstanceState == null)
-        uiState.show(binding.statsTextView)
+        binding.statsTextView.update(uiState)
     }
 
     override fun onDestroyView() {

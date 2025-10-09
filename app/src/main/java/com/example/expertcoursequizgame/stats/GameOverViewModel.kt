@@ -1,7 +1,7 @@
 package com.example.expertcoursequizgame.stats
 
-import com.example.expertcoursequizgame.ClearViewModel
 import com.example.expertcoursequizgame.MyViewModel
+import com.example.expertcoursequizgame.di.ClearViewModel
 import com.example.expertcoursequizgame.views.stats.StatsUiState
 
 class GameOverViewModel(

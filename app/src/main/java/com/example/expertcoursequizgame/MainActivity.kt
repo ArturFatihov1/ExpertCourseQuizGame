@@ -3,12 +3,13 @@ package com.example.expertcoursequizgame
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import com.example.expertcoursequizgame.di.ProvideViewModel
 import com.example.expertcoursequizgame.game.GameScreen
 import com.example.expertcoursequizgame.game.NavigateToGame
 import com.example.expertcoursequizgame.stats.GameOverScreen
 import com.example.expertcoursequizgame.stats.NavigateToGameOver
 
-class MainActivity : AppCompatActivity(), Navigate {
+class MainActivity : AppCompatActivity(), Navigate, ProvideViewModel {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -20,6 +21,8 @@ class MainActivity : AppCompatActivity(), Navigate {
 
     override fun navigate(screen: Screen) = screen.show(R.id.container, supportFragmentManager)
 
+    override fun <T : MyViewModel> makeViewModel(clasz: Class<T>): T =
+        (application as ProvideViewModel).makeViewModel(clasz)
 }
 
 interface Navigate : NavigateToGame, NavigateToGameOver {

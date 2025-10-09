@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.expertcoursequizgame.ProvideViewModel
 import com.example.expertcoursequizgame.databinding.FragmentGameOverBinding
+import com.example.expertcoursequizgame.di.ProvideViewModel
 import com.example.expertcoursequizgame.game.NavigateToGame
 
 class GameOverFragment : Fragment() {
@@ -26,7 +26,7 @@ class GameOverFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val viewModel: GameOverViewModel =
-            (requireActivity().application as ProvideViewModel).makeViewModel(GameOverViewModel::class.java)
+            (requireActivity() as ProvideViewModel).makeViewModel(GameOverViewModel::class.java)
 
         binding.newGameButton.setOnClickListener {
             viewModel.clear()

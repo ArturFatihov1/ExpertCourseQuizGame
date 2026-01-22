@@ -241,4 +241,23 @@ class ScenarioTest {
 
     }
 
+    @Test
+    fun caseNumber4() {
+        val loadPage = LoadPage()
+
+        loadPage.assertErrorState()
+        activityScenarioRule.scenario.recreate()
+
+        loadPage.clickRetry()
+
+        loadPage.assertProgressState()
+        activityScenarioRule.scenario.recreate()
+
+        loadPage.waitTillGone()
+
+        gamePage.assertAskedQuestionState()
+        activityScenarioRule.scenario.recreate()
+        gamePage.assertAskedQuestionState()
+    }
+
 }

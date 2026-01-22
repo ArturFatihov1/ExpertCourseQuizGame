@@ -1,5 +1,6 @@
 package com.example.expertcoursequizgame.game
 
+import com.example.expertcoursequizgame.di.ClearViewModel
 import com.example.expertcoursequizgame.views.choice.ChoiceUiState
 import org.junit.Before
 import org.junit.Test
@@ -9,11 +10,12 @@ class GameViewModelTest {
 
     private lateinit var viewModel: GameViewModel
     private lateinit var repository: FakeRepository
+    private lateinit var clearViewModel: ClearViewModel
 
     @Before
     fun setup() {
         repository = FakeRepository()
-        viewModel = GameViewModel(repository = repository)
+        viewModel = GameViewModel(clearViewModel = clearViewModel, repository = repository)
     }
 
     /**

@@ -1,4 +1,6 @@
-package com.example.expertcoursequizgame
+package com.example.expertcoursequizgame.game
+
+import com.example.expertcoursequizgame.IntCache
 
 interface GameRepository {
 
@@ -10,7 +12,15 @@ interface GameRepository {
 
     fun next()
 
+    fun isLastQuestion(): Boolean
+
+    fun clear()
+
     class Base(
+        private val corrects: IntCache,
+        private val incorrects: IntCache,
+        private val index: IntCache,
+        private val userChoiceIndex: IntCache,
         private val list: List<QuestionAndChoices> = listOf(
             QuestionAndChoices(
                 question = "What color is the sky?",
@@ -25,31 +35,40 @@ interface GameRepository {
         )
     ) : GameRepository {
 
-        private var index = 0
-
         override fun questionAndChoices(): QuestionAndChoices {
-            return list[index]
+            return list[index.read()]
         }
 
-        private var userChoiceIndex = -1
-
         override fun saveUserChoice(index: Int) {
-            userChoiceIndex = index
+            userChoiceIndex.save(index)
         }
 
         override fun check(): CorrectAndUserChoiceIndexes {
+            val correctIndex = questionAndChoices().correctIndex
+            if (userChoiceIndex.read() == correctIndex) {
+                corrects.save(corrects.read() + 1)
+            } else {
+                incorrects.save(incorrects.read() + 1)
+            }
             return CorrectAndUserChoiceIndexes(
                 correctIndex = questionAndChoices().correctIndex,
-                userChoiceIndex = userChoiceIndex
+                userChoiceIndex = userChoiceIndex.read()
             )
         }
 
         override fun next() {
-            userChoiceIndex = -1
-            if (index + 1 == list.size)
-                index = 0
-            else
-                index++
+            userChoiceIndex.save(-1)
+            index.save(index.read() + 1)
         }
+
+        override fun isLastQuestion() = index.read() == list.size
+
+        override fun clear() {
+            userChoiceIndex.save(-1)
+            index.save(0)
+        }
+
     }
+
+
 }

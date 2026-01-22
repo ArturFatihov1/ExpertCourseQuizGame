@@ -36,6 +36,9 @@ android {
     buildFeatures {
         viewBinding = true
     }
+    testOptions {
+        animationsDisabled = true
+    }
 }
 
 dependencies {
@@ -47,4 +50,5 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    testImplementation(kotlin("test"))
 }

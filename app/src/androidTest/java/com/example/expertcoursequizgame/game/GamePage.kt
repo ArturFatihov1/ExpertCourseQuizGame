@@ -40,7 +40,7 @@ class GamePage(
     private val checkUi = ButtonUi(
         id = R.id.checkButton,
         textResId = R.string.check,
-        colorHex = "#6C106C",
+        colorHex = "#8E228E",
         containerIdMatcher = containerIdMatcher,
         containerClassTypeMatcher = classTypeMatcher
     )
@@ -117,5 +117,9 @@ class GamePage(
 
     fun clickNext() {
         nextUi.click()
+    }
+
+    fun assertNotVisible() {
+        questionUi.assertDoesNotExist()
     }
 }

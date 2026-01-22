@@ -1,16 +1,21 @@
-package com.example.expertcoursequizgame
+package com.example.expertcoursequizgame.game
 
-import org.junit.Assert.assertEquals
+import com.example.expertcoursequizgame.di.ClearViewModel
+import com.example.expertcoursequizgame.views.choice.ChoiceUiState
 import org.junit.Before
 import org.junit.Test
+import kotlin.test.assertEquals
 
 class GameViewModelTest {
 
     private lateinit var viewModel: GameViewModel
+    private lateinit var repository: FakeRepository
+    private lateinit var clearViewModel: ClearViewModel
 
     @Before
     fun setup() {
-        viewModel = GameViewModel(repository = FakeRepository())
+        repository = FakeRepository()
+        viewModel = GameViewModel(clearViewModel = clearViewModel, repository = repository)
     }
 
     /**
@@ -28,27 +33,60 @@ class GameViewModelTest {
 
         actual = viewModel.chooseFirst()
         expected = GameUiState.ChoiceMade(
-            question = "q1",
             choices = listOf<ChoiceUiState>(
-                ChoiceUiState.NotAvailableToChoose(text = "c1"),
-                ChoiceUiState.AvailableToChoose(text = "c2"),
-                ChoiceUiState.AvailableToChoose(text = "c3"),
-                ChoiceUiState.AvailableToChoose(text = "c4"),
+                ChoiceUiState.NotAvailableToChoose,
+                ChoiceUiState.AvailableToChoose,
+                ChoiceUiState.AvailableToChoose,
+                ChoiceUiState.AvailableToChoose,
             )
         )
         assertEquals(expected, actual)
 
         actual = viewModel.check()
         expected = GameUiState.AnswerChecked(
-            question = "q1",
             choices = listOf<ChoiceUiState>(
-                ChoiceUiState.Correct(text = "c1"),
-                ChoiceUiState.NotAvailableToChoose(text = "c2"),
-                ChoiceUiState.NotAvailableToChoose(text = "c3"),
-                ChoiceUiState.NotAvailableToChoose(text = "c4"),
+                ChoiceUiState.Correct,
+                ChoiceUiState.NotAvailableToChoose,
+                ChoiceUiState.NotAvailableToChoose,
+                ChoiceUiState.NotAvailableToChoose,
             )
         )
         assertEquals(expected, actual)
+
+        actual = viewModel.next()
+        expected = GameUiState.AskedQuestion(
+            question = "q2",
+            choices = listOf("cd1", "cd2", "cd3", "cd4")
+        )
+        assertEquals(expected, actual)
+        assertEquals(false, repository.clearCalled)
+
+        actual = viewModel.chooseFirst()
+        expected = GameUiState.ChoiceMade(
+            choices = listOf<ChoiceUiState>(
+                ChoiceUiState.NotAvailableToChoose,
+                ChoiceUiState.AvailableToChoose,
+                ChoiceUiState.AvailableToChoose,
+                ChoiceUiState.AvailableToChoose,
+            )
+        )
+        assertEquals(expected, actual)
+
+        actual = viewModel.check()
+        expected = GameUiState.AnswerChecked(
+            choices = listOf<ChoiceUiState>(
+                ChoiceUiState.Correct,
+                ChoiceUiState.NotAvailableToChoose,
+                ChoiceUiState.NotAvailableToChoose,
+                ChoiceUiState.NotAvailableToChoose,
+            )
+        )
+        assertEquals(expected, actual)
+
+        actual = viewModel.next()
+        expected = GameUiState.Finish
+        assertEquals(expected, actual)
+        assertEquals(true, repository.clearCalled)
     }
 
     @Test
@@ -62,60 +100,55 @@ class GameViewModelTest {
 
         actual = viewModel.chooseFirst()
         expected = GameUiState.ChoiceMade(
-            question = "q1",
             choices = listOf<ChoiceUiState>(
-                ChoiceUiState.NotAvailableToChoose(text = "c1"),
-                ChoiceUiState.AvailableToChoose(text = "c2"),
-                ChoiceUiState.AvailableToChoose(text = "c3"),
-                ChoiceUiState.AvailableToChoose(text = "c4"),
+                ChoiceUiState.NotAvailableToChoose,
+                ChoiceUiState.AvailableToChoose,
+                ChoiceUiState.AvailableToChoose,
+                ChoiceUiState.AvailableToChoose,
             )
         )
         assertEquals(expected, actual)
 
         actual = viewModel.chooseSecond()
         expected = GameUiState.ChoiceMade(
-            question = "q1",
             choices = listOf<ChoiceUiState>(
-                ChoiceUiState.AvailableToChoose(text = "c1"),
-                ChoiceUiState.NotAvailableToChoose(text = "c2"),
-                ChoiceUiState.AvailableToChoose(text = "c3"),
-                ChoiceUiState.AvailableToChoose(text = "c4"),
+                ChoiceUiState.AvailableToChoose,
+                ChoiceUiState.NotAvailableToChoose,
+                ChoiceUiState.AvailableToChoose,
+                ChoiceUiState.AvailableToChoose,
             )
         )
         assertEquals(expected, actual)
 
         actual = viewModel.chooseThird()
         expected = GameUiState.ChoiceMade(
-            question = "q1",
             choices = listOf<ChoiceUiState>(
-                ChoiceUiState.AvailableToChoose(text = "c1"),
-                ChoiceUiState.AvailableToChoose(text = "c2"),
-                ChoiceUiState.NotAvailableToChoose(text = "c3"),
-                ChoiceUiState.AvailableToChoose(text = "c4"),
+                ChoiceUiState.AvailableToChoose,
+                ChoiceUiState.AvailableToChoose,
+                ChoiceUiState.NotAvailableToChoose,
+                ChoiceUiState.AvailableToChoose,
             )
         )
         assertEquals(expected, actual)
 
         actual = viewModel.chooseForth()
         expected = GameUiState.ChoiceMade(
-            question = "q1",
             choices = listOf<ChoiceUiState>(
-                ChoiceUiState.AvailableToChoose(text = "c1"),
-                ChoiceUiState.AvailableToChoose(text = "c2"),
-                ChoiceUiState.AvailableToChoose(text = "c3"),
-                ChoiceUiState.NotAvailableToChoose(text = "c4"),
+                ChoiceUiState.AvailableToChoose,
+                ChoiceUiState.AvailableToChoose,
+                ChoiceUiState.AvailableToChoose,
+                ChoiceUiState.NotAvailableToChoose,
             )
         )
         assertEquals(expected, actual)
 
         actual = viewModel.check()
         expected = GameUiState.AnswerChecked(
-            question = "q1",
             choices = listOf<ChoiceUiState>(
-                ChoiceUiState.Correct(text = "c1"),
-                ChoiceUiState.NotAvailableToChoose(text = "c2"),
-                ChoiceUiState.NotAvailableToChoose(text = "c3"),
-                ChoiceUiState.InCorrect(text = "c4"),
+                ChoiceUiState.Correct,
+                ChoiceUiState.NotAvailableToChoose,
+                ChoiceUiState.NotAvailableToChoose,
+                ChoiceUiState.InCorrect,
             )
         )
         assertEquals(expected, actual)
@@ -167,7 +200,15 @@ private class FakeRepository : GameRepository {
     override fun next() {
         userChoiceIndex = -1
         index++
-        if (index == list.size)
-            index = 0
+
+    }
+
+    override fun isLastQuestion(): Boolean {
+        return index == list.size
+    }
+
+    var clearCalled = false
+    override fun clear() {
+        clearCalled = true
     }
 }

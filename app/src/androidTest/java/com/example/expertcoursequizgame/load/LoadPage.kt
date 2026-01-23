@@ -3,6 +3,7 @@ package com.example.expertcoursequizgame.load
 import android.view.View
 import android.widget.LinearLayout
 import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import com.example.expertcoursequizgame.R
 import com.example.expertcoursequizgame.game.ButtonUi
 import org.hamcrest.Matcher
@@ -53,6 +54,6 @@ class LoadPage {
     }
 
     fun waitTillGone() {
-        errorUi.waitTillDoesnExist()
+        errorUi.waitTillDoesntExist()
     }
 }

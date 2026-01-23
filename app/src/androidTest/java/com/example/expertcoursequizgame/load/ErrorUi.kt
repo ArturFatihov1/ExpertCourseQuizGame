@@ -1,7 +1,6 @@
 package com.example.expertcoursequizgame.load
 
 import android.view.View
-import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.ViewInteraction
@@ -24,7 +23,7 @@ class ErrorUi(
     private val interaction: ViewInteraction = onView(
         allOf(
             withId(viewId),
-            withText(R.id.no_internet_connection),
+            withText(R.string.no_internet_connection),
             isAssignableFrom(TextView::class.java),
             containerIdMatcher,
             classTypeMatcher
@@ -45,7 +44,7 @@ class ErrorUi(
     }
 
 
-    fun waitTillDoesnExist() {
+    fun waitTillDoesntExist() {
         onView(isRoot()).perform(waitTillDoesntExist(viewId, 4000))
     }
 }

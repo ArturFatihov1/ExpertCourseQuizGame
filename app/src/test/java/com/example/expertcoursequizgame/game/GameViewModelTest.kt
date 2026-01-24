@@ -1,5 +1,6 @@
 package com.example.expertcoursequizgame.game
 
+import com.example.expertcoursequizgame.MyViewModel
 import com.example.expertcoursequizgame.di.ClearViewModel
 import com.example.expertcoursequizgame.views.choice.ChoiceUiState
 import org.junit.Before
@@ -15,7 +16,7 @@ class GameViewModelTest {
     @Before
     fun setup() {
         repository = FakeRepository()
-        viewModel = GameViewModel(clearViewModel = clearViewModel, repository = repository)
+        viewModel = GameViewModel(FakeClearViewModel(), repository = repository)
     }
 
     /**
@@ -211,4 +212,11 @@ private class FakeRepository : GameRepository {
     override fun clear() {
         clearCalled = true
     }
+}
+
+class FakeClearViewModel : ClearViewModel {
+    override fun clear(viewModelClass: Class<out MyViewModel>) {
+
+    }
+
 }

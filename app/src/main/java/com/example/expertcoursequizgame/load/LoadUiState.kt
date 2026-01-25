@@ -1,6 +1,7 @@
 package com.example.expertcoursequizgame.load
 
 import com.example.expertcoursequizgame.R
+import com.example.expertcoursequizgame.game.NavigateToGame
 import com.example.expertcoursequizgame.views.error.ErrorUiState
 import com.example.expertcoursequizgame.views.error.UpdateError
 import com.example.expertcoursequizgame.views.visiblebutton.UpdateVisibility
@@ -12,6 +13,8 @@ interface LoadUiState {
         retryButton: UpdateVisibility,
         progressBar: UpdateVisibility
     )
+
+    fun navigate(game: NavigateToGame) = Unit
 
     abstract class Abstract(
         private val errorUiState: ErrorUiState,
@@ -39,7 +42,9 @@ interface LoadUiState {
         ErrorUiState.Hide,
         VisibilityUiState.Gone,
         VisibilityUiState.Gone
-    )
+    ) {
+        override fun navigate(game: NavigateToGame) = game.navigateToGame()
+    }
 
     data class Error(private val message: String) : Abstract(
         ErrorUiState.Show(R.string.no_internet_connection),

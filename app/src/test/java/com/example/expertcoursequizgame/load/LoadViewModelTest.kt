@@ -6,7 +6,7 @@ import kotlin.test.assertEquals
 class LoadViewModelTest {
 
     @Test
-    fun caseFragment() {
+    fun sameFragment() {
         val repository = FakeLoadRepository()
         repository.expectResult(LoadResult.Success)
         val observable = FakeUiObservable()
@@ -36,7 +36,7 @@ class LoadViewModelTest {
         assertEquals(2, observable.postUiStateCalledList.size)
         assertEquals(LoadUiState.Success, fragment.statesList[1])
         assertEquals(2, fragment.statesList.size)
-    }ff
+    }
 
     @Test
     fun recreateActivity() {
@@ -113,7 +113,7 @@ private class FakeLoadRepository : LoadRepository {
     }
 
     fun returnResult() {
-        loadResultCallback.invoke(loadResult)
+        loadResultCallback.invoke(loadResult!!)
     }
 }
 
@@ -127,7 +127,7 @@ private class FakeUiObservable : UiObservable {
         registerCalledCount++
         observerCached = observer
         if (uiStateCached != null) {
-            observerCached!!.invoke(uiStateCached)
+            observerCached!!.invoke(uiStateCached!!)
             uiStateCached = null
         }
     }
@@ -144,7 +144,7 @@ private class FakeUiObservable : UiObservable {
         if (observerCached == null) {
             uiStateCached = uiState
         } else {
-            observerCached!!.invoke(uiStateCached)
+            observerCached!!.invoke(uiState)
             uiStateCached = null
         }
     }

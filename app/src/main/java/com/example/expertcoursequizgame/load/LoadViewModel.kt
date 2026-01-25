@@ -6,6 +6,7 @@ class LoadViewModel(
     private val repository: LoadRepository,
     private val observable: UiObservable
 ) : MyViewModel {
+
     fun load(isFirstRun: Boolean = true) {
         if (isFirstRun) {
             observable.postUiState(LoadUiState.Progress)
@@ -23,7 +24,5 @@ class LoadViewModel(
 
     fun startUpdates(observer: (LoadUiState) -> Unit) = observable.register(observer)
 
-
     fun stopUpdates() = observable.unregister()
-
 }

@@ -1,6 +1,8 @@
 package com.example.expertcoursequizgame.game
 
 import com.example.expertcoursequizgame.IntCache
+import com.example.expertcoursequizgame.load.ParceQuestionAndChoices
+import com.example.expertcoursequizgame.load.StringCache
 
 interface GameRepository {
 
@@ -34,6 +36,32 @@ interface GameRepository {
             )
         )
     ) : GameRepository {
+
+        constructor(
+            corrects: IntCache,
+            incorrects: IntCache,
+            index: IntCache,
+            userChoiceIndex: IntCache,
+            dataCache: StringCache,
+            parceQuestionAndChoices: ParceQuestionAndChoices
+        ) : this(
+            corrects,
+            incorrects,
+            index,
+            userChoiceIndex,
+            parceQuestionAndChoices.parse(dataCache.read()).results.map {
+                val list = mutableListOf<String>()
+                list.add(it.correct_answer)
+                list.addAll(it.incorrect_answer)
+                val finalList = list.shuffled()
+                val indexOfCorrect = finalList.indexOf(it.correct_answer)
+                QuestionAndChoices(
+                    it.question,
+                    finalList,
+                    indexOfCorrect
+                )
+            }
+        )
 
         override fun questionAndChoices(): QuestionAndChoices {
             return list[index.read()]

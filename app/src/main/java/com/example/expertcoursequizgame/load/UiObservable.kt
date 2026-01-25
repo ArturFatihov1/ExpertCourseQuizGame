@@ -15,7 +15,7 @@ interface UiObservable {
         override fun register(observer: (LoadUiState) -> Unit) { //onResume
             observerCached = observer
             if (uiStateCached != null) {
-                observerCached!!.invoke(uiStateCached)
+                observerCached!!.invoke(uiStateCached!!)
                 uiStateCached = null
             }
         }
@@ -28,7 +28,7 @@ interface UiObservable {
             if (observerCached == null) {  //onPause was called, but onResume still not
                 uiStateCached = uiState //save ui state till new fragment become onResume
             } else {
-                observerCached!!.invoke(uiStateCached) //after onResume and till onPause
+                observerCached!!.invoke(uiStateCached!!) //after onResume and till onPause
                 uiStateCached = null
             }
         }

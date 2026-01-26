@@ -1,4 +1,4 @@
-package com.example.expertcoursequizgame.load
+package com.example.expertcoursequizgame.load.data
 
 import com.google.gson.Gson
 import java.net.URL
@@ -8,7 +8,7 @@ interface LoadRepository {
     fun load(resultCallback: (LoadResult) -> Unit)
 
     class Base(
-        private val parceQuestionAndChoices: ParceQuestionAndChoices,
+        private val parseQuestionAndChoices: ParseQuestionAndChoices,
         private val dataCache: StringCache,
     ) : LoadRepository {
 
@@ -19,20 +19,21 @@ interface LoadRepository {
             try {
                 val data = connection.inputStream.bufferedReader().use { it.readText() }
 
-                val response = parceQuestionAndChoices.parse(data)
+                val response = parseQuestionAndChoices.parse(data)
                 if (response.response_code == 0) {
                     val list = response.results
                     if (list.isEmpty()) {
                         resultCallback.invoke(LoadResult.Error("Empty data, try again later"))
                     } else {
+                        dataCache.save(data)
                         resultCallback.invoke(LoadResult.Success)
                     }
                 } else {
-                    dataCache.save(data)
                     resultCallback.invoke(LoadResult.Error(handleResponseCode(response.response_code)))
                 }
 
             } catch (e: Exception) {
+                e.printStackTrace()
                 resultCallback.invoke(LoadResult.Error(e.message ?: "error"))
             } finally {
                 connection.disconnect()
@@ -52,12 +53,12 @@ interface LoadRepository {
     }
 }
 
-interface ParceQuestionAndChoices {
+interface ParseQuestionAndChoices {
     fun parse(source: String): Response
 
     class Base(
         private val gson: Gson
-    ) : ParceQuestionAndChoices {
+    ) : ParseQuestionAndChoices {
         override fun parse(source: String): Response {
             return gson.fromJson(source, Response::class.java)
         }
@@ -73,5 +74,5 @@ class QuestionAndChoicesCloud(
     //todo serialized name
     val question: String,
     val correct_answer: String,
-    val incorrect_answer: List<String>
+    val incorrect_answers: List<String>
 )

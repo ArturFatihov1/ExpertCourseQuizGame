@@ -1,6 +1,7 @@
-package com.example.expertcoursequizgame.load
+package com.example.expertcoursequizgame.load.presentation
 
 import com.example.expertcoursequizgame.MyViewModel
+import com.example.expertcoursequizgame.load.data.LoadRepository
 
 class LoadViewModel(
     private val repository: LoadRepository,

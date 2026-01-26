@@ -1,4 +1,4 @@
-package com.example.expertcoursequizgame.load
+package com.example.expertcoursequizgame.load.presentation
 
 import android.os.Bundle
 import android.view.LayoutInflater

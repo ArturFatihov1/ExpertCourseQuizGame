@@ -2,6 +2,7 @@ package com.example.expertcoursequizgame.di
 
 import com.example.expertcoursequizgame.MyViewModel
 import com.example.expertcoursequizgame.game.di.ProvideGameViewModel
+import com.example.expertcoursequizgame.load.di.ProvideLoadViewModel
 import com.example.expertcoursequizgame.stats.di.ProvideGameOverViewModel
 
 interface ProvideViewModel {
@@ -13,6 +14,7 @@ interface ProvideViewModel {
 
         init {
             chain = Error()
+            chain = ProvideLoadViewModel(core, chain)
             chain = ProvideGameViewModel(core, chain)
             chain = ProvideGameOverViewModel(core, chain)
         }

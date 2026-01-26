@@ -1,4 +1,4 @@
-package com.example.expertcoursequizgame.load
+package com.example.expertcoursequizgame.load.data
 
 interface LoadResult {
     fun isSuccessful(): Boolean

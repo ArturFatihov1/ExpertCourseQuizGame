@@ -1,4 +1,4 @@
-package com.example.expertcoursequizgame.load
+package com.example.expertcoursequizgame.load.presentation
 
 import com.example.expertcoursequizgame.R
 import com.example.expertcoursequizgame.game.NavigateToGame

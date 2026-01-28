@@ -1,5 +1,6 @@
 package com.example.expertcoursequizgame.load.di
 
+import com.example.expertcoursequizgame.RunAsync
 import com.example.expertcoursequizgame.di.AbstractProvideViewModel
 import com.example.expertcoursequizgame.di.Core
 import com.example.expertcoursequizgame.di.Module
@@ -25,7 +26,8 @@ class LoadModule(private val core: Core) : Module<LoadViewModel> {
                 ParseQuestionAndChoices.Base(core.gson),
                 StringCache.Base(core.sharedPreferences, "response_data", defaultResponse)
             ),
-            UiObservable.Base()
+            UiObservable.Base(),
+            RunAsync.Base()
         )
     }
 }

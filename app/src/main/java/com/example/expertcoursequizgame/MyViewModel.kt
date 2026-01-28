@@ -1,4 +1,3 @@
 package com.example.expertcoursequizgame
 
-interface MyViewModel {
-}
+interface MyViewModel

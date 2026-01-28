@@ -1,24 +1,26 @@
 package com.example.expertcoursequizgame.load.presentation
 
 import com.example.expertcoursequizgame.MyViewModel
+import com.example.expertcoursequizgame.RunAsync
 import com.example.expertcoursequizgame.load.data.LoadRepository
 
 class LoadViewModel(
     private val repository: LoadRepository,
-    private val observable: UiObservable
+    private val observable: UiObservable,
+    private val runAsync: RunAsync
 ) : MyViewModel {
 
     fun load(isFirstRun: Boolean = true) {
         if (isFirstRun) {
             observable.postUiState(LoadUiState.Progress)
-            repository.load {
-                observable.postUiState(
-                    if (it.isSuccessful())
-                        LoadUiState.Success
-                    else
-                        LoadUiState.Error(it.message())
-
-                )
+            runAsync.handleAsync({
+                val result = repository.load()
+                if (result.isSuccessful())
+                    LoadUiState.Success
+                else
+                    LoadUiState.Error(result.message())
+            }) {
+                observable.postUiState(it)
             }
         }
     }

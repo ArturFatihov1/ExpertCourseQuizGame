@@ -5,7 +5,7 @@ import java.net.URL
 import javax.net.ssl.HttpsURLConnection
 
 interface LoadRepository {
-    fun load(resultCallback: (LoadResult) -> Unit)
+    fun load(): LoadResult
 
     class Base(
         private val parseQuestionAndChoices: ParseQuestionAndChoices,
@@ -14,27 +14,28 @@ interface LoadRepository {
 
         private val url = "https://opentdb.com/api.php?amount=10"
 
-        override fun load(resultCallback: (LoadResult) -> Unit) {
+        override fun load(): LoadResult {
             val connection = URL(url).openConnection() as HttpsURLConnection
             try {
+                connection.doInput = true
                 val data = connection.inputStream.bufferedReader().use { it.readText() }
 
                 val response = parseQuestionAndChoices.parse(data)
                 if (response.response_code == 0) {
                     val list = response.results
                     if (list.isEmpty()) {
-                        resultCallback.invoke(LoadResult.Error("Empty data, try again later"))
+                        return (LoadResult.Error("Empty data, try again later"))
                     } else {
                         dataCache.save(data)
-                        resultCallback.invoke(LoadResult.Success)
+                        return (LoadResult.Success)
                     }
                 } else {
-                    resultCallback.invoke(LoadResult.Error(handleResponseCode(response.response_code)))
+                    return (LoadResult.Error(handleResponseCode(response.response_code)))
                 }
 
             } catch (e: Exception) {
                 e.printStackTrace()
-                resultCallback.invoke(LoadResult.Error(e.message ?: "error"))
+                return (LoadResult.Error(e.message ?: "error"))
             } finally {
                 connection.disconnect()
             }

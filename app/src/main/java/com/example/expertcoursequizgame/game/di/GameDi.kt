@@ -8,7 +8,7 @@ import com.example.expertcoursequizgame.di.ProvideViewModel
 import com.example.expertcoursequizgame.game.GameRepository
 import com.example.expertcoursequizgame.game.GameViewModel
 import com.example.expertcoursequizgame.load.data.ParseQuestionAndChoices
-import com.example.expertcoursequizgame.load.data.Response
+import com.example.expertcoursequizgame.load.data.QuizResponse
 import com.example.expertcoursequizgame.load.data.StringCache
 
 class GameModule(private val core: Core) : Module<GameViewModel> {
@@ -16,7 +16,7 @@ class GameModule(private val core: Core) : Module<GameViewModel> {
         val corrects = IntCache.Base(core.sharedPreferences, "corrects", 0)
         val incorrects = IntCache.Base(core.sharedPreferences, "incorrects", 0)
 
-        val responseDefault = Response(-1, emptyList())
+        val responseDefault = QuizResponse(-1, emptyList())
         val defaultResponse = core.gson.toJson(responseDefault)
         return GameViewModel(
             core.clearViewModel,

@@ -3,7 +3,8 @@ package com.example.expertcoursequizgame.load.data
 import com.google.gson.Gson
 
 interface LoadRepository {
-    fun load(): LoadResult
+
+    suspend fun load(): LoadResult
 
     class Base(
         private val service: QuizService,
@@ -14,7 +15,7 @@ interface LoadRepository {
 
         // private val url = "https://opentdb.com/api.php?amount=10"
 
-        override fun load(): LoadResult {
+        override suspend fun load(): LoadResult {
             try {
                 val result = service.questionAndChoices().execute()
                 if (result.isSuccessful) {

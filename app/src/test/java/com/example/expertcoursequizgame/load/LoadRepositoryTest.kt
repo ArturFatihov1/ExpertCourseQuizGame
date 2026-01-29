@@ -1,7 +1,6 @@
 package com.example.expertcoursequizgame.load
 
 import com.example.expertcoursequizgame.load.data.QuestionAndChoicesCloud
-import com.example.expertcoursequizgame.load.data.Response
 import com.google.gson.Gson
 import java.net.URL
 import javax.net.ssl.HttpsURLConnection

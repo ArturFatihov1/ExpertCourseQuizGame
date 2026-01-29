@@ -6,6 +6,8 @@ import com.example.expertcoursequizgame.load.data.LoadResult
 import com.example.expertcoursequizgame.load.presentation.LoadUiState
 import com.example.expertcoursequizgame.load.presentation.LoadViewModel
 import com.example.expertcoursequizgame.load.presentation.UiObservable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
 import kotlin.test.assertEquals
@@ -116,7 +118,7 @@ private class FakeLoadRepository : LoadRepository {
 
     var loadCalledCount = 0
 
-    override fun load(): LoadResult {
+    override suspend fun load(): LoadResult {
         loadCalledCount++
         return loadResult!!
     }
@@ -160,7 +162,11 @@ private class FakeRunAsync : RunAsync {
     private var result: Any? = null
     private var ui: (Any) -> Unit = {}
 
-    override fun <T : Any> handleAsync(heavyOperation: () -> T, uiUpdate: (T) -> Unit) {
+    override fun <T : Any> handleAsync(
+        coroutineScope: CoroutineScope,
+        heavyOperation: suspend () -> T,
+        uiUpdate: (T) -> Unit
+    ) = runBlocking {
         result = heavyOperation.invoke()
         ui = uiUpdate as (Any) -> Unit
     }

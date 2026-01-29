@@ -29,7 +29,7 @@ class LoadModule(private val core: Core) : Module<LoadViewModel> {
         val responseDefault = QuizResponse(-1, emptyList())
         val defaultResponse = core.gson.toJson(responseDefault)
         val client = OkHttpClient.Builder().addInterceptor(HttpLoggingInterceptor().apply {
-            setLevel(HttpLoggingInterceptor.Level.HEADERS)
+            setLevel(HttpLoggingInterceptor.Level.BODY)
         }).readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
             .connectTimeout(60, TimeUnit.SECONDS)
@@ -37,6 +37,7 @@ class LoadModule(private val core: Core) : Module<LoadViewModel> {
             .build()
         val retrofit = Retrofit.Builder()
             .baseUrl("https://opentdb.com/")
+            .client(client)
             .addConverterFactory(GsonConverterFactory.create(core.gson))
             .build()
 

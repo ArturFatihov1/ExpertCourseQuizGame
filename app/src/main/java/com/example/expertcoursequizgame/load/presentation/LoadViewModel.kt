@@ -2,6 +2,7 @@ package com.example.expertcoursequizgame.load.presentation
 
 import com.example.expertcoursequizgame.MyViewModel
 import com.example.expertcoursequizgame.RunAsync
+import com.example.expertcoursequizgame.di.ClearViewModel
 import com.example.expertcoursequizgame.load.data.LoadRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -10,7 +11,8 @@ import kotlinx.coroutines.SupervisorJob
 class LoadViewModel(
     private val repository: LoadRepository,
     private val observable: UiObservable,
-    private val runAsync: RunAsync
+    private val runAsync: RunAsync,
+    private val clearViewModel: ClearViewModel
 ) : MyViewModel {
 
     private val viewModelScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
@@ -20,9 +22,10 @@ class LoadViewModel(
             observable.postUiState(LoadUiState.Progress)
             runAsync.handleAsync(viewModelScope, {
                 val result = repository.load()
-                if (result.isSuccessful())
+                if (result.isSuccessful()) {
+                    clearViewModel.clear(LoadViewModel::class.java)
                     LoadUiState.Success
-                else
+                } else
                     LoadUiState.Error(result.message())
             }) {
                 observable.postUiState(it)

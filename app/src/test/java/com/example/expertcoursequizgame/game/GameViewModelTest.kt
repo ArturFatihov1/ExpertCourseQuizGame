@@ -11,7 +11,6 @@ class GameViewModelTest {
 
     private lateinit var viewModel: GameViewModel
     private lateinit var repository: FakeRepository
-    private lateinit var clearViewModel: ClearViewModel
 
     @Before
     fun setup() {
@@ -215,8 +214,13 @@ private class FakeRepository : GameRepository {
 }
 
 class FakeClearViewModel : ClearViewModel {
+    private var actual: Class<out MyViewModel>? = null
     override fun clear(viewModelClass: Class<out MyViewModel>) {
+        actual = viewModelClass
+    }
 
+    fun assertClearCalled(expected: Class<out MyViewModel>) {
+        assertEquals(expected, actual)
     }
 
 }

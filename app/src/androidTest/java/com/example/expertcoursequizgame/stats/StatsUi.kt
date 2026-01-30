@@ -2,37 +2,41 @@ package com.example.expertcoursequizgame.stats
 
 import android.view.View
 import android.widget.TextView
-import androidx.test.espresso.Espresso
+import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.ViewInteraction
-import androidx.test.espresso.assertion.ViewAssertions
-import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.example.expertcoursequizgame.R
+import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.Matcher
-import org.hamcrest.Matchers
+
 
 class StatsUi(
-    incorrects: Int,
-    corrects: Int,
+    incorrects: Int, corrects: Int,
     containerIdMatcher: Matcher<View>,
-    classTypeMatcher: Matcher<View>
+    containerClassTypeMatcher: Matcher<View>
 ) {
+
     private val interaction: ViewInteraction =
-        Espresso.onView(
-            Matchers.allOf(
-                ViewMatchers.withId(R.id.statsTextView),
-                ViewMatchers.isAssignableFrom(TextView::class.java),
-                ViewMatchers.withText("Game Over\n\nCorrects: $corrects\nIncorrects: $incorrects"),
+        onView(
+            allOf(
+                withId(R.id.statsTextView),
+                isAssignableFrom(TextView::class.java),
+                withText("Game Over\n\nCorrects: $corrects\nIncorrects: $incorrects"),
                 containerIdMatcher,
-                classTypeMatcher
+                containerClassTypeMatcher,
             )
         )
 
     fun assertVisible() {
-        interaction.check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        interaction.check(matches(isDisplayed()))
     }
 
     fun assertDoesNotExist() {
-        interaction.check(ViewAssertions.doesNotExist())
+        interaction.check(doesNotExist())
     }
-
 }

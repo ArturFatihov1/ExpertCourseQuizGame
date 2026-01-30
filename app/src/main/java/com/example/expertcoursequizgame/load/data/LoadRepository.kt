@@ -1,6 +1,7 @@
 package com.example.expertcoursequizgame.load.data
 
 import com.google.gson.Gson
+import kotlinx.coroutines.delay
 
 interface LoadRepository {
 
@@ -11,9 +12,6 @@ interface LoadRepository {
         private val parseQuestionAndChoices: ParseQuestionAndChoices,
         private val dataCache: StringCache,
     ) : LoadRepository {
-
-
-        // private val url = "https://opentdb.com/api.php?amount=10"
 
         override suspend fun load(): LoadResult {
             try {
@@ -51,6 +49,21 @@ interface LoadRepository {
                 else -> ""
             }
         }
+    }
+
+    class Fake : LoadRepository {
+
+        private var count = 0
+        override suspend fun load(): LoadResult {
+            delay(3000)
+            return if (count == 0) {
+                count++
+                LoadResult.Error("")
+            } else {
+                LoadResult.Success
+            }
+        }
+
     }
 }
 

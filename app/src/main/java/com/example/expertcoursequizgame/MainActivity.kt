@@ -1,7 +1,6 @@
 package com.example.expertcoursequizgame
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.expertcoursequizgame.di.ProvideViewModel
 import com.example.expertcoursequizgame.game.GameScreen
@@ -14,7 +13,6 @@ import com.example.expertcoursequizgame.stats.NavigateToGameOver
 class MainActivity : AppCompatActivity(), Navigate, ProvideViewModel {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
         if (savedInstanceState == null) //todo mainViewModel later

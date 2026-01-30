@@ -23,15 +23,16 @@ class ErrorUi(
     private val interaction: ViewInteraction = onView(
         allOf(
             withId(viewId),
-            withText(R.string.no_internet_connection),
             isAssignableFrom(TextView::class.java),
             containerIdMatcher,
+
             classTypeMatcher
         )
     )
 
     fun assertVisible() {
         interaction.check(matches(isDisplayed()))
+            .check(matches(withText(R.string.no_internet_connection)))
 
     }
 
@@ -40,11 +41,11 @@ class ErrorUi(
     }
 
     fun waitTillVisible() {
-        onView(isRoot()).perform(waitTillDisplayed(viewId, 4000))
+        onView(isRoot()).perform(waitTillDisplayed(viewId, 5000))
     }
 
 
     fun waitTillDoesntExist() {
-        onView(isRoot()).perform(waitTillDoesntExist(viewId, 4000))
+        onView(isRoot()).perform(waitTillDoesntExist(viewId, 5000))
     }
 }

@@ -1,6 +1,7 @@
 package com.example.expertcoursequizgame.load
 
 import com.example.expertcoursequizgame.RunAsync
+import com.example.expertcoursequizgame.game.FakeClearViewModel
 import com.example.expertcoursequizgame.load.data.LoadRepository
 import com.example.expertcoursequizgame.load.data.LoadResult
 import com.example.expertcoursequizgame.load.presentation.LoadUiState
@@ -19,14 +20,21 @@ class LoadViewModelTest {
     private lateinit var runAsync: FakeRunAsync
     private lateinit var viewModel: LoadViewModel
     private lateinit var fragment: FakeFragment
+    private lateinit var clearViewModel: FakeClearViewModel
 
     @Before
     fun setup() {
         repository = FakeLoadRepository()
         observable = FakeUiObservable()
         runAsync = FakeRunAsync()
+        clearViewModel = FakeClearViewModel()
         viewModel =
-            LoadViewModel(repository = repository, observable = observable, runAsync = runAsync)
+            LoadViewModel(
+                repository = repository,
+                observable = observable,
+                runAsync = runAsync,
+                clearViewModel
+            )
         fragment = FakeFragment()
     }
 
@@ -55,6 +63,7 @@ class LoadViewModelTest {
         assertEquals(2, observable.postUiStateCalledList.size)
         assertEquals(LoadUiState.Success, fragment.statesList[1])
         assertEquals(2, fragment.statesList.size)
+        clearViewModel.assertClearCalled(LoadViewModel::class.java)
     }
 
     @Test

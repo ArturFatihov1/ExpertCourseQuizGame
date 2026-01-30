@@ -20,14 +20,22 @@ class GameModule(private val core: Core) : Module<GameViewModel> {
         val defaultResponse = core.gson.toJson(responseDefault)
         return GameViewModel(
             core.clearViewModel,
-            GameRepository.Base(
-                corrects,
-                incorrects,
-                IntCache.Base(core.sharedPreferences, "indexKey", 0),
-                IntCache.Base(core.sharedPreferences, "userChoiceIndexKey", -1),
-                StringCache.Base(core.sharedPreferences, "response_data", defaultResponse),
-                ParseQuestionAndChoices.Base(core.gson)
-            )
+            if (core.runUiTests)
+                GameRepository.Base(
+                    corrects,
+                    incorrects,
+                    IntCache.Base(core.sharedPreferences, "indexKey", 0),
+                    IntCache.Base(core.sharedPreferences, "userChoiceIndexKey", -1),
+                )
+            else
+                GameRepository.Base(
+                    corrects,
+                    incorrects,
+                    IntCache.Base(core.sharedPreferences, "indexKey", 0),
+                    IntCache.Base(core.sharedPreferences, "userChoiceIndexKey", -1),
+                    StringCache.Base(core.sharedPreferences, "response_data", defaultResponse),
+                    ParseQuestionAndChoices.Base(core.gson)
+                )
         )
     }
 }

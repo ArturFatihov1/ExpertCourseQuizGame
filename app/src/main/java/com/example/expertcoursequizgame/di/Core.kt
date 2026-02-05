@@ -7,7 +7,7 @@ import com.example.expertcoursequizgame.load.data.cache.CacheModule
 class Core(val context: Context, val clearViewModel: ClearViewModel) {
 
     val runAsync: RunAsync = RunAsync.Base()
-    val runUiTests = true
+    val runUiTests = false
     val size = 10
     val sharedPreferences = context.getSharedPreferences("quizAppData", Context.MODE_PRIVATE)
 

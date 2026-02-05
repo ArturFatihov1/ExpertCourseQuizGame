@@ -1,64 +1,44 @@
 package com.example.expertcoursequizgame.load.data
 
+import com.example.expertcoursequizgame.core.IntCache
 import com.example.expertcoursequizgame.load.data.cache.IncorrectCache
 import com.example.expertcoursequizgame.load.data.cache.QuestionAndChoicesDao
 import com.example.expertcoursequizgame.load.data.cache.QuestionCache
-import com.example.expertcoursequizgame.load.data.cloud.QuizService
+import com.example.expertcoursequizgame.load.data.cloud.CloudDataSource
 import kotlinx.coroutines.delay
+import java.io.IOException
+import java.net.UnknownHostException
 
 interface LoadRepository {
 
-    suspend fun load(): LoadResult
+    suspend fun load()
 
     class Base(
-        private val service: QuizService,
-        private val dao: QuestionAndChoicesDao,
-        private val size: Int
+        private val index: IntCache,
+        private val cloudDataSource: CloudDataSource,
+        private val cacheDataSource: QuestionAndChoicesDao,
     ) : LoadRepository {
 
-        override suspend fun load(): LoadResult {
+        override suspend fun load() {
             try {
-                val result = service.questionAndChoices(size).execute()
-                if (result.isSuccessful) {
-                    val body = result.body()!!
-                    if (body.responseCode == 0) {
-                        val list = body.dataList
-                        if (list.isEmpty()) {
-                            return (LoadResult.Error("Empty data, try again later"))
-                        } else {
-                            val incorrects = mutableListOf<IncorrectCache>()
-                            val question: List<QuestionCache> =
-                                body.dataList.mapIndexed { index, data ->
-                                    val temporary = data.incorrectAnswers.map {
-                                        IncorrectCache(questionId = index, choice = it)
-                                    }
-                                    incorrects.addAll(temporary)
-                                    QuestionCache(index, data.question, data.correctAnswer)
-                                }
-                            dao.saveQuestions(question)
-                            dao.saveIncorrects(incorrects)
-                            return (LoadResult.Success)
-                        }
-                    } else {
-                        return (LoadResult.Error(handleResponseCode(body.responseCode)))
+                val dataList = cloudDataSource.load()
+                val incorrects = mutableListOf<IncorrectCache>()
+                val questions = dataList.mapIndexed { index, data ->
+                    val temporary = data.incorrectAnswers.map {
+                        IncorrectCache(questionId = index, choice = it)
                     }
-                } else {
-                    return (LoadResult.Error(handleResponseCode(result.body()!!.responseCode)))
+                    incorrects.addAll(temporary)
+                    QuestionCache(index, data.question, data.correctAnswer)
                 }
+                cacheDataSource.saveQuestions(questions)
+                cacheDataSource.saveIncorrects(incorrects)
+                index.save(0)
             } catch (e: Exception) {
-                return (LoadResult.Error(e.message ?: "error"))
-            }
-
-        }
-
-        private fun handleResponseCode(code: Int): String {
-            return when (code) {
-                1 -> "No Results Could not return results. The API doesn't have enough questions for your query. (Ex. Asking for 50 Questions in a Category that only has 20.)"
-                2 -> "Invalid Parameter Contains an invalid parameter. Arguements passed in aren't valid. (Ex. Amount = Five)"
-                3 -> "Token Not Found Session Token does not exist."
-                4 -> "Token Empty Session Token has returned all possible questions for the specified query. Resetting the Token is necessary."
-                5 -> "Rate Limit Too many requests have occurred. Each IP can only access the API once every 5 seconds."
-                else -> ""
+                if (e is IOException)
+                    throw NoInternetConnectionException()
+                if (e is IllegalArgumentException)
+                    throw BackendException(e.message ?: "")
+                throw ServiceUnavailable()
             }
         }
     }
@@ -66,11 +46,11 @@ interface LoadRepository {
     class Fake : LoadRepository {
 
         private var count = 0
-        override suspend fun load(): LoadResult {
+        override suspend fun load() {
             delay(3000)
-            return if (count == 0) {
+            if (count == 0) {
                 count++
-                LoadResult.Error("")
+                throw UnknownHostException()
             } else {
                 LoadResult.Success
             }
@@ -79,3 +59,8 @@ interface LoadRepository {
     }
 }
 
+class NoInternetConnectionException : Exception()
+
+class BackendException(override val message: String) : Exception(message)
+
+class ServiceUnavailable : Exception()

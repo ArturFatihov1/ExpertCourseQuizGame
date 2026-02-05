@@ -1,10 +1,12 @@
 package com.example.expertcoursequizgame.load.di
 
+import com.example.expertcoursequizgame.core.IntCache
 import com.example.expertcoursequizgame.di.AbstractProvideViewModel
 import com.example.expertcoursequizgame.di.Core
 import com.example.expertcoursequizgame.di.Module
 import com.example.expertcoursequizgame.di.ProvideViewModel
 import com.example.expertcoursequizgame.load.data.LoadRepository
+import com.example.expertcoursequizgame.load.data.cloud.CloudDataSource
 import com.example.expertcoursequizgame.load.data.cloud.QuizService
 import com.example.expertcoursequizgame.load.presentation.LoadUiObservable
 import com.example.expertcoursequizgame.load.presentation.LoadViewModel
@@ -40,9 +42,12 @@ class LoadModule(private val core: Core) : Module<LoadViewModel> {
                 LoadRepository.Fake()
             else
                 LoadRepository.Base(
-                    retrofit.create(QuizService::class.java),
-                    core.cacheModule.dao(),
-                    core.size,
+                    IntCache.Base(core.sharedPreferences, "indexKey", core.size),
+                    CloudDataSource.Base(
+                        retrofit.create(QuizService::class.java),
+                        core.size,
+                    ),
+                    core.cacheModule.dao()
                 ),
             LoadUiObservable.Base(),
             core.runAsync,

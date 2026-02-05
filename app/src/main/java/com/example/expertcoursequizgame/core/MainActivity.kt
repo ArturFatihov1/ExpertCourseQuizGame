@@ -15,9 +15,9 @@ class MainActivity : AppCompatActivity(), Navigate, ProvideViewModel {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        if (savedInstanceState == null) //todo mainViewModel later
-            navigateToLoad()
+        val viewModel = makeViewModel(MainViewModel::class.java)
+        val screen = viewModel.firstScreen(savedInstanceState == null)
+        navigate(screen)
     }
 
     override fun navigate(screen: Screen) = screen.show(R.id.container, supportFragmentManager)

@@ -17,6 +17,7 @@ interface ProvideViewModel {
             chain = ProvideLoadViewModel(core, chain)
             chain = ProvideGameViewModel(core, chain)
             chain = ProvideGameOverViewModel(core, chain)
+            chain = ProvideMainViewModel(core, chain)
         }
 
         override fun <S : Any, T : MyViewModel<S>> makeViewModel(clasz: Class<T>): T =

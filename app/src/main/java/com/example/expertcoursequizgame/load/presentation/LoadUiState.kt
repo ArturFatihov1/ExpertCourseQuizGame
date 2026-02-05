@@ -46,9 +46,15 @@ interface LoadUiState {
         override fun navigate(game: NavigateToGame) = game.navigateToGame()
     }
 
-    data class Error(private val message: String) : Abstract(
-        ErrorUiState.Show(R.string.no_internet_connection),
+    data class ErrorRes(val messageId: Int = R.string.no_internet_connection) : Abstract(
+        ErrorUiState.ShowRes(messageId),
         VisibilityUiState.Visible,
-        VisibilityUiState.Gone
+        VisibilityUiState.Gone,
+    )
+
+    data class Error(private val message: String) : Abstract(
+        ErrorUiState.Show(message),
+        VisibilityUiState.Visible,
+        VisibilityUiState.Gone,
     )
 }

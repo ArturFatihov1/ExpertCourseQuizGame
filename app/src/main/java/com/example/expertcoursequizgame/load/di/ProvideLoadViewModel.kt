@@ -1,17 +1,13 @@
 package com.example.expertcoursequizgame.load.di
 
-import com.example.expertcoursequizgame.RunAsync
 import com.example.expertcoursequizgame.di.AbstractProvideViewModel
 import com.example.expertcoursequizgame.di.Core
 import com.example.expertcoursequizgame.di.Module
 import com.example.expertcoursequizgame.di.ProvideViewModel
 import com.example.expertcoursequizgame.load.data.LoadRepository
-import com.example.expertcoursequizgame.load.data.ParseQuestionAndChoices
-import com.example.expertcoursequizgame.load.data.QuizResponse
-import com.example.expertcoursequizgame.load.data.QuizService
-import com.example.expertcoursequizgame.load.data.StringCache
+import com.example.expertcoursequizgame.load.data.cloud.QuizService
+import com.example.expertcoursequizgame.load.presentation.LoadUiObservable
 import com.example.expertcoursequizgame.load.presentation.LoadViewModel
-import com.example.expertcoursequizgame.load.presentation.UiObservable
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -26,8 +22,6 @@ class ProvideLoadViewModel(core: Core, next: ProvideViewModel) :
 
 class LoadModule(private val core: Core) : Module<LoadViewModel> {
     override fun viewModel(): LoadViewModel {
-        val responseDefault = QuizResponse(-1, emptyList())
-        val defaultResponse = core.gson.toJson(responseDefault)
         val client = OkHttpClient.Builder().addInterceptor(HttpLoggingInterceptor().apply {
             setLevel(HttpLoggingInterceptor.Level.BODY)
         }).readTimeout(60, TimeUnit.SECONDS)
@@ -38,7 +32,7 @@ class LoadModule(private val core: Core) : Module<LoadViewModel> {
         val retrofit = Retrofit.Builder()
             .baseUrl("https://opentdb.com/")
             .client(client)
-            .addConverterFactory(GsonConverterFactory.create(core.gson))
+            .addConverterFactory(GsonConverterFactory.create())
             .build()
 
         return LoadViewModel(
@@ -47,11 +41,11 @@ class LoadModule(private val core: Core) : Module<LoadViewModel> {
             else
                 LoadRepository.Base(
                     retrofit.create(QuizService::class.java),
-                    ParseQuestionAndChoices.Base(core.gson),
-                    StringCache.Base(core.sharedPreferences, "response_data", defaultResponse)
+                    core.cacheModule.dao(),
+                    core.size,
                 ),
-            UiObservable.Base(),
-            RunAsync.Base(),
+            LoadUiObservable.Base(),
+            core.runAsync,
             core.clearViewModel
         )
     }

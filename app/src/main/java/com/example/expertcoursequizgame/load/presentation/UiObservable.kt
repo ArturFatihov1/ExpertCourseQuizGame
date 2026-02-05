@@ -1,18 +1,18 @@
 package com.example.expertcoursequizgame.load.presentation
 
-interface UiObservable {
-    fun register(observer: (LoadUiState) -> Unit)
+interface UiObservable<T : Any> {
+    fun register(observer: (T) -> Unit)
 
     fun unregister()
 
-    fun postUiState(uiState: LoadUiState)
+    fun postUiState(uiState: T)
 
-    class Base() : UiObservable {
+    abstract class Abstract<T : Any> : UiObservable<T> {
 
-        private var uiStateCached: LoadUiState? = null
-        private var observerCached: ((LoadUiState) -> Unit)? = null // aka fragment
+        private var uiStateCached: T? = null
+        private var observerCached: ((T) -> Unit)? = null // aka fragment
 
-        override fun register(observer: (LoadUiState) -> Unit) { //onResume
+        override fun register(observer: (T) -> Unit) { //onResume
             observerCached = observer
             if (uiStateCached != null) {
                 observerCached!!.invoke(uiStateCached!!)
@@ -24,7 +24,7 @@ interface UiObservable {
             observerCached = null
         }
 
-        override fun postUiState(uiState: LoadUiState) { //pinged by ViewModel asynchronously
+        override fun postUiState(uiState: T) { //pinged by ViewModel asynchronously
             if (observerCached == null) {  //onPause was called, but onResume still not
                 uiStateCached = uiState //save ui state till new fragment become onResume
             } else {

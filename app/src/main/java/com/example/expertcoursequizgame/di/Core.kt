@@ -1,11 +1,15 @@
 package com.example.expertcoursequizgame.di
 
 import android.content.Context
-import com.google.gson.Gson
+import com.example.expertcoursequizgame.core.RunAsync
+import com.example.expertcoursequizgame.load.data.cache.CacheModule
 
 class Core(val context: Context, val clearViewModel: ClearViewModel) {
 
+    val runAsync: RunAsync = RunAsync.Base()
     val runUiTests = true
+    val size = 10
     val sharedPreferences = context.getSharedPreferences("quizAppData", Context.MODE_PRIVATE)
-    val gson = Gson()
+
+    val cacheModule: CacheModule = CacheModule.Base(context)
 }

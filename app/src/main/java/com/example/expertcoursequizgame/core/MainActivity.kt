@@ -1,7 +1,8 @@
-package com.example.expertcoursequizgame
+package com.example.expertcoursequizgame.core
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.example.expertcoursequizgame.R
 import com.example.expertcoursequizgame.di.ProvideViewModel
 import com.example.expertcoursequizgame.game.GameScreen
 import com.example.expertcoursequizgame.game.NavigateToGame
@@ -21,7 +22,7 @@ class MainActivity : AppCompatActivity(), Navigate, ProvideViewModel {
 
     override fun navigate(screen: Screen) = screen.show(R.id.container, supportFragmentManager)
 
-    override fun <T : MyViewModel> makeViewModel(clasz: Class<T>): T =
+    override fun <S : Any, T : MyViewModel<S>> makeViewModel(clasz: Class<T>): T =
         (application as ProvideViewModel).makeViewModel(clasz)
 }
 

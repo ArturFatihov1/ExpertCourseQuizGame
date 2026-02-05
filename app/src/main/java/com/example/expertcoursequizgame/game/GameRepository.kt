@@ -1,24 +1,79 @@
 package com.example.expertcoursequizgame.game
 
-import com.example.expertcoursequizgame.IntCache
-import com.example.expertcoursequizgame.load.data.ParseQuestionAndChoices
-import com.example.expertcoursequizgame.load.data.StringCache
+import com.example.expertcoursequizgame.core.IntCache
+import com.example.expertcoursequizgame.load.data.cache.ClearDatabase
+import com.example.expertcoursequizgame.load.data.cache.QuestionAndChoicesDao
 
 interface GameRepository {
 
-    fun questionAndChoices(): QuestionAndChoices
+    suspend fun questionAndChoices(): QuestionAndChoices
 
     fun saveUserChoice(index: Int)
 
-    fun check(): CorrectAndUserChoiceIndexes
+    suspend fun check(): CorrectAndUserChoiceIndexes
 
     fun next()
 
     fun isLastQuestion(): Boolean
 
-    fun clear()
+    suspend fun clear()
 
     class Base(
+        private val corrects: IntCache,
+        private val incorrects: IntCache,
+        private val index: IntCache,
+        private val userChoiceIndex: IntCache,
+        private val dao: QuestionAndChoicesDao,
+        private val clearDatabase: ClearDatabase,
+        private val size: Int
+    ) : GameRepository {
+
+        override suspend fun questionAndChoices(): QuestionAndChoices {
+            val id = index.read()
+            val question = dao.question(id)
+            val incorrects = dao.incorrects(id)
+            val choices = (listOf(question.correctAnswer) + incorrects.map { it.choice }).shuffled()
+            return QuestionAndChoices(
+                question.question,
+                choices,
+                choices.indexOf(question.correctAnswer)
+            )
+        }
+
+        override fun saveUserChoice(index: Int) {
+            userChoiceIndex.save(index)
+        }
+
+        override suspend fun check(): CorrectAndUserChoiceIndexes {
+            val correctIndex = questionAndChoices().correctIndex
+            if (userChoiceIndex.read() == correctIndex) {
+                corrects.save(corrects.read() + 1)
+            } else {
+                incorrects.save(incorrects.read() + 1)
+            }
+            return CorrectAndUserChoiceIndexes(
+                correctIndex = questionAndChoices().correctIndex,
+                userChoiceIndex = userChoiceIndex.read()
+            )
+        }
+
+        override fun next() {
+            userChoiceIndex.save(-1)
+            index.save(index.read() + 1)
+        }
+
+        override fun isLastQuestion(): Boolean = index.read() == size
+
+
+        override suspend fun clear() {
+            userChoiceIndex.save(-1)
+            index.save(0)
+            clearDatabase.clear()
+        }
+
+    }
+
+    class Fake(
         private val corrects: IntCache,
         private val incorrects: IntCache,
         private val index: IntCache,
@@ -37,33 +92,7 @@ interface GameRepository {
         )
     ) : GameRepository {
 
-        constructor(
-            corrects: IntCache,
-            incorrects: IntCache,
-            index: IntCache,
-            userChoiceIndex: IntCache,
-            dataCache: StringCache,
-            parceQuestionAndChoices: ParseQuestionAndChoices
-        ) : this(
-            corrects,
-            incorrects,
-            index,
-            userChoiceIndex,
-            parceQuestionAndChoices.parse(dataCache.read()).dataList.map {
-                val list = mutableListOf<String>()
-                list.add(it.correctAnswer)
-                list.addAll(it.incorrectAnswers)
-                val finalList = list.shuffled()
-                val indexOfCorrect = finalList.indexOf(it.correctAnswer)
-                QuestionAndChoices(
-                    it.question,
-                    finalList,
-                    indexOfCorrect
-                )
-            }
-        )
-
-        override fun questionAndChoices(): QuestionAndChoices {
+        override suspend fun questionAndChoices(): QuestionAndChoices {
             return list[index.read()]
         }
 
@@ -71,7 +100,7 @@ interface GameRepository {
             userChoiceIndex.save(index)
         }
 
-        override fun check(): CorrectAndUserChoiceIndexes {
+        override suspend fun check(): CorrectAndUserChoiceIndexes {
             val correctIndex = questionAndChoices().correctIndex
             if (userChoiceIndex.read() == correctIndex) {
                 corrects.save(corrects.read() + 1)
@@ -91,7 +120,7 @@ interface GameRepository {
 
         override fun isLastQuestion() = index.read() == list.size
 
-        override fun clear() {
+        override suspend fun clear() {
             userChoiceIndex.save(-1)
             index.save(0)
         }

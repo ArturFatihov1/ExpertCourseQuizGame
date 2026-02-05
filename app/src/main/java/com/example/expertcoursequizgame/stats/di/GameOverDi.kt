@@ -1,6 +1,6 @@
 package com.example.expertcoursequizgame.stats.di
 
-import com.example.expertcoursequizgame.IntCache
+import com.example.expertcoursequizgame.core.IntCache
 import com.example.expertcoursequizgame.di.AbstractProvideViewModel
 import com.example.expertcoursequizgame.di.Core
 import com.example.expertcoursequizgame.di.Module

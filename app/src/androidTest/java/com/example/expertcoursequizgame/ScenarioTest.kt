@@ -2,9 +2,10 @@ package com.example.expertcoursequizgame
 
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.expertcoursequizgame.stats.GameOverPage
+import com.example.expertcoursequizgame.core.MainActivity
 import com.example.expertcoursequizgame.game.GamePage
 import com.example.expertcoursequizgame.load.LoadPage
+import com.example.expertcoursequizgame.stats.GameOverPage
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

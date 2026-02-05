@@ -1,4 +1,4 @@
-package com.example.expertcoursequizgame
+package com.example.expertcoursequizgame.core
 
 import android.content.SharedPreferences
 

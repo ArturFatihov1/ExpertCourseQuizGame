@@ -22,7 +22,6 @@ interface GameUiState : Serializable {
 
     fun navigate(navigate: NavigateToGameOver) = Unit
 
-    object Empty : GameUiState
     object Finish : GameUiState {
         override fun navigate(navigate: NavigateToGameOver) = navigate.navigateToGameOver()
     }

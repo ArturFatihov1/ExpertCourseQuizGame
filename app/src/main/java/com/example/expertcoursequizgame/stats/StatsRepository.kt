@@ -1,6 +1,6 @@
 package com.example.expertcoursequizgame.stats
 
-import com.example.expertcoursequizgame.IntCache
+import com.example.expertcoursequizgame.core.IntCache
 
 
 interface StatsRepository {

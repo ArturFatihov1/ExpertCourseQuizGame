@@ -1,4 +1,4 @@
-package com.example.expertcoursequizgame
+package com.example.expertcoursequizgame.core
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager

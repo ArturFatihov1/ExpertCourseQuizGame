@@ -1,4 +1,4 @@
-package com.example.expertcoursequizgame
+package com.example.expertcoursequizgame.core
 
 import android.app.Application
 import com.example.expertcoursequizgame.di.ClearViewModel
@@ -14,14 +14,14 @@ class QuizApp : Application(), ProvideViewModel {
     override fun onCreate() {
         super.onCreate()
         val clearViewModel = object : ClearViewModel {
-            override fun clear(viewModelClass: Class<out MyViewModel>) =
+            override fun clear(viewModelClass: Class<out MyViewModel<*>>) =
                 factory.clear(viewModelClass)
         }
         val make = ProvideViewModel.Make(Core(this, clearViewModel))
         factory = ManageViewModels.Factory(make)
     }
 
-    override fun <T : MyViewModel> makeViewModel(clasz: Class<T>): T {
+    override fun <S : Any, T : MyViewModel<S>> makeViewModel(clasz: Class<T>): T {
         return factory.makeViewModel(clasz)
     }
 }

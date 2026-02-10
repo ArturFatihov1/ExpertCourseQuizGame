@@ -1,25 +1,40 @@
 package com.example.expertcoursequizgame.game.di
 
-import com.example.expertcoursequizgame.IntCache
+import com.example.expertcoursequizgame.core.IntCache
 import com.example.expertcoursequizgame.di.AbstractProvideViewModel
 import com.example.expertcoursequizgame.di.Core
 import com.example.expertcoursequizgame.di.Module
 import com.example.expertcoursequizgame.di.ProvideViewModel
 import com.example.expertcoursequizgame.game.GameRepository
+import com.example.expertcoursequizgame.game.GameUiObservable
 import com.example.expertcoursequizgame.game.GameViewModel
 
 class GameModule(private val core: Core) : Module<GameViewModel> {
     override fun viewModel(): GameViewModel {
         val corrects = IntCache.Base(core.sharedPreferences, "corrects", 0)
         val incorrects = IntCache.Base(core.sharedPreferences, "incorrects", 0)
+
         return GameViewModel(
+            GameUiObservable.Base(),
             core.clearViewModel,
-            GameRepository.Base(
-                corrects,
-                incorrects,
-                IntCache.Base(core.sharedPreferences, "indexKey", 0),
-                IntCache.Base(core.sharedPreferences, "userChoiceIndexKey", -1)
-            )
+            if (core.runUiTests)
+                GameRepository.Fake(
+                    corrects,
+                    incorrects,
+                    IntCache.Base(core.sharedPreferences, "indexKey", 0),
+                    IntCache.Base(core.sharedPreferences, "userChoiceIndexKey", -1),
+                )
+            else
+                GameRepository.Base(
+                    corrects,
+                    incorrects,
+                    IntCache.Base(core.sharedPreferences, "indexKey", 0),
+                    IntCache.Base(core.sharedPreferences, "userChoiceIndexKey", -1),
+                    core.cacheModule.dao(),
+                    core.cacheModule.clearDatabase(),
+                    core.size
+                ),
+            core.runAsync
         )
     }
 }

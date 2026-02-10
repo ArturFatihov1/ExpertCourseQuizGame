@@ -1,10 +1,15 @@
-package com.example.expertcoursequizgame
+package com.example.expertcoursequizgame.core
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 
 interface Screen {
     fun show(containerId: Int, fragmentManager: FragmentManager)
+
+    object Empty : Screen {
+        override fun show(containerId: Int, fragmentManager: FragmentManager) = Unit
+
+    }
 
     abstract class Replace(private val fragment: Class<out Fragment>) : Screen {
         override fun show(containerId: Int, fragmentManager: FragmentManager) {

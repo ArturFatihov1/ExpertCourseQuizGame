@@ -1,6 +1,7 @@
 package com.example.expertcoursequizgame.stats
 
 import com.example.expertcoursequizgame.di.ClearViewModel
+import com.example.expertcoursequizgame.game.FakeClearViewModel
 import com.example.expertcoursequizgame.views.stats.StatsUiState
 import org.junit.Test
 import kotlin.test.assertEquals
@@ -11,7 +12,7 @@ class GameOverViewModelTest {
     @Test
     fun test() {
         val repository = FakeRepository()
-        val viewModel = GameOverViewModel(clearViewModel = clearViewModel,repository = repository)
+        val viewModel = GameOverViewModel(FakeClearViewModel(), repository = repository)
         assertEquals(StatsUiState.Base(2, 3), viewModel.init(isFirstRun = true))
         assertEquals(1, repository.clearCalledCount)
 

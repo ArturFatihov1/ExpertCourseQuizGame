@@ -1,4 +1,4 @@
-package com.example.expertcoursequizgame.game
+package com.example.expertcoursequizgame.stats
 
 import android.view.View
 import android.widget.TextView
@@ -11,15 +11,16 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.example.expertcoursequizgame.R
+import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.Matcher
-import org.hamcrest.Matchers.allOf
+
 
 class StatsUi(
-    incorrects: Int,
-    corrects: Int,
+    incorrects: Int, corrects: Int,
     containerIdMatcher: Matcher<View>,
-    classTypeMatcher: Matcher<View>
+    containerClassTypeMatcher: Matcher<View>
 ) {
+
     private val interaction: ViewInteraction =
         onView(
             allOf(
@@ -27,7 +28,7 @@ class StatsUi(
                 isAssignableFrom(TextView::class.java),
                 withText("Game Over\n\nCorrects: $corrects\nIncorrects: $incorrects"),
                 containerIdMatcher,
-                classTypeMatcher
+                containerClassTypeMatcher,
             )
         )
 
@@ -38,5 +39,4 @@ class StatsUi(
     fun assertDoesNotExist() {
         interaction.check(doesNotExist())
     }
-
 }

@@ -21,7 +21,10 @@ interface LoadRepository {
 
         override suspend fun load() {
             try {
-                val dataList = cloudDataSource.load()
+                val originalDataList = cloudDataSource.load()
+                val dataList = originalDataList.filter { data ->
+                    data.incorrectAnswers.size >= 3
+                }
                 val incorrects = mutableListOf<IncorrectCache>()
                 val questions = dataList.mapIndexed { index, data ->
                     val temporary = data.incorrectAnswers.map {
